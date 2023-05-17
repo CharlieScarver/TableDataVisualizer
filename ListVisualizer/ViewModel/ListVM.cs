@@ -24,7 +24,10 @@ namespace ListVisualizer.ViewModel
 
         private readonly ObservableCollection<ExpandoObject> _dynamicItems = new ObservableCollection<ExpandoObject>();
 
+        private ObservableCollection<IListItem> _classItems = new ObservableCollection<IListItem>();
+
         private TableData _tableDataItems;
+        private DataTable _dataTable = new DataTable();
 
         public string DatabaseName
         {
@@ -54,9 +57,19 @@ namespace ListVisualizer.ViewModel
             set { _tableDataItems = value; NotifyPropertyChanged("TableDataItems"); }
         }
 
+        public IEnumerable<DataRow> DataTableItems
+        {
+            get { return _dataTable.AsEnumerable(); }
+        }
+
         public ObservableCollection<ExpandoObject> DynamicItems
         {
             get { return _dynamicItems; }
+        }
+
+        public ObservableCollection<IListItem> ClassItems
+        {
+            get { return _classItems; }
         }
 
         public ICommand CmdConnectToDb
@@ -67,6 +80,11 @@ namespace ListVisualizer.ViewModel
         public ICommand CmdToggleCheckbox
         {
             get { return new CommandCreator(ToggleCheckbox); }
+        }
+
+        public ICommand CmdSetItems
+        {
+            get { return new CommandCreator(SetItems); }
         }
 
         private void ConnectToDb(object gridParam)
@@ -88,9 +106,11 @@ namespace ListVisualizer.ViewModel
             ListItems.Clear();
             bool readColNames = true;
 
-            DataGrid grid = (DataGrid)gridParam;
-            DataTable table = new DataTable();
-            grid.Columns.Clear();
+            //DataGrid grid = (DataGrid)gridParam;
+            DataTable table = _dataTable; //new DataTable();
+            table.Columns.Clear();
+            table.Rows.Clear();
+            // grid.Columns.Clear();
 
             while (notEndOfResult)
             {
@@ -107,7 +127,7 @@ namespace ListVisualizer.ViewModel
                     {
                         ItemPropeties.Add(colName);
                         table.Columns.Add(colName, typeof(string));
-                        grid.Columns.Add(new DataGridTextColumn() { Header = colName });
+                        //grid.Columns.Add(new DataGridTextColumn() { Header = colName });
                     }
                     values.Add(value);
                     arrValues[i] = value;
@@ -123,7 +143,8 @@ namespace ListVisualizer.ViewModel
                 notEndOfResult = reader.Read();
             }
 
-            grid.ItemsSource = table.AsEnumerable();
+            NotifyPropertyChanged("DataTableItems"); // !! Maybe put in setter?
+            //grid.ItemsSource = table.AsEnumerable();
             CreateTableData();
         }
 
@@ -141,6 +162,16 @@ namespace ListVisualizer.ViewModel
                 rows.Add(tr);
             }
             TableData table = new TableData(ItemPropeties.ToList<string>(), rows);
+        }
+
+        private void SetItems(object itemsParam)
+        {
+            IEnumerable<IListItem> items = itemsParam as IEnumerable<IListItem>;
+            ClassItems.Clear();
+            foreach (var item in items)
+            {
+                ClassItems.Add(item);
+            }
         }
     }
 }

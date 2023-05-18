@@ -10,45 +10,53 @@
     <Window.DataContext>
         <ViewModel:ListVM/>
     </Window.DataContext>
-    <StackPanel>
-        <Label Margin="5,5,5,0">Connection string:</Label>
-        <TextBox Text="{Binding DatabaseName, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
 
-        <Label Margin="5,5,5,0">Table name:</Label>
-        <TextBox Text="{Binding TableName, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+        <StackPanel>
+            <Label Margin="5,5,5,0">Connection string:</Label>
+            <TextBox Text="{Binding DatabaseName, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
-        <Button Margin="5" Command="{Binding CmdConnectToDb}" CommandParameter="{Binding ElementName=dataGrid}">Connect</Button>
+            <Label Margin="5,5,5,0">Table name:</Label>
+            <TextBox Text="{Binding TableName, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
-        <ListBox ItemsSource="{Binding ItemPropeties}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <CheckBox Content="{Binding}" Command="{Binding DataContext.CmdToggleCheckbox, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            <Button Margin="5" Command="{Binding CmdConnectToDb}" CommandParameter="{Binding ElementName=dataGrid3s}">Connect</Button>
 
-        <ListBox ItemsSource="{Binding ListItems}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <ListBox ItemsSource="{Binding}">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
+            <ListBox Name="columnsList" ItemsSource="{Binding ItemPropeties}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Content="{Binding}" Command="{Binding DataContext.CmdToggleCheckbox, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"
+                                  CommandParameter="{Binding .}"
+                                  Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Label Margin="3" Content="{Binding}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            <ListBox ItemsSource="{Binding ListItems}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <ListBox ItemsSource="{Binding}">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
 
-        <DataGrid Name="dataGrid"  AutoGenerateColumns="False" ItemsSource="{Binding DynamicItems}" />
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Margin="3" Content="{Binding}" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
-        <DataGrid Name="dataGrid2s"  AutoGenerateColumns="False" ItemsSource="{Binding DataTableItems}" />
-    </StackPanel>
+            <DataGrid Name="dataGrid"  AutoGenerateColumns="False" ItemsSource="{Binding DynamicItems}" />
+
+            <DataGrid Name="dataGrid2s"  AutoGenerateColumns="False" ItemsSource="{Binding DataTableItems}" />
+
+            <DataGrid Name="dataGrid3s"  AutoGenerateColumns="False" />
+
+        </StackPanel>
+    </ScrollViewer>
 </Window>

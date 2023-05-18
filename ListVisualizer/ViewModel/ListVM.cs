@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace ListVisualizer.ViewModel
@@ -28,6 +30,8 @@ namespace ListVisualizer.ViewModel
 
         private TableData _tableDataItems;
         private DataTable _dataTable = new DataTable();
+
+        private DataGrid dataGrid;
 
         public string DatabaseName
         {
@@ -106,11 +110,17 @@ namespace ListVisualizer.ViewModel
             ListItems.Clear();
             bool readColNames = true;
 
-            //DataGrid grid = (DataGrid)gridParam;
             DataTable table = _dataTable; //new DataTable();
             table.Columns.Clear();
             table.Rows.Clear();
-            // grid.Columns.Clear();
+
+            // Latest
+            DataGrid grid = (DataGrid)gridParam;
+            if (dataGrid != grid) {
+                dataGrid = grid;
+            }
+            grid.Columns.Clear();
+            // ---
 
             while (notEndOfResult)
             {
@@ -128,6 +138,13 @@ namespace ListVisualizer.ViewModel
                         ItemPropeties.Add(colName);
                         table.Columns.Add(colName, typeof(string));
                         //grid.Columns.Add(new DataGridTextColumn() { Header = colName });
+
+                        // Latest
+                        DataGridTextColumn column = new DataGridTextColumn();
+                        column.Header = colName;
+                        column.Binding = new Binding($"[{i}]");
+                        grid.Columns.Add(column);
+                        // ---
                     }
                     values.Add(value);
                     arrValues[i] = value;
@@ -143,14 +160,26 @@ namespace ListVisualizer.ViewModel
                 notEndOfResult = reader.Read();
             }
 
+            // Latest
+            ListItems.CollectionChanged += DataGrid_CollectionChanged;
+            grid.ItemsSource = ListItems;
+
+            // ---
+
+
             NotifyPropertyChanged("DataTableItems"); // !! Maybe put in setter?
             //grid.ItemsSource = table.AsEnumerable();
             CreateTableData();
         }
 
+        private void DataGrid_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            dataGrid.Items.Refresh();
+        }
+
         private void ToggleCheckbox(object parameter)
         {
-
+            Console.WriteLine("hi");
         }
 
         private void CreateTableData()

@@ -29,5 +29,48 @@ namespace ListVisualizer.View
         {
         }
 
+        private List<bool> checkboxStates = new List<bool>();
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            UpdateCheckboxStates();
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            UpdateCheckboxStates();
+        }
+
+        private void UpdateCheckboxStates()
+        {
+            checkboxStates.Clear();
+
+            foreach (var item in columnsList.Items)
+            {
+                var listBoxItem = (ListBoxItem)columnsList.ItemContainerGenerator.ContainerFromItem(item);
+                var checkBox = FindVisualChild<CheckBox>(listBoxItem);
+
+                checkboxStates.Add(checkBox.IsChecked ?? false);
+            }
+        }
+
+        private childItem FindVisualChild<childItem>(DependencyObject obj) where childItem : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+
+                if (child != null && child is childItem)
+                    return (childItem)child;
+
+                var childOfChild = FindVisualChild<childItem>(child);
+
+                if (childOfChild != null)
+                    return childOfChild;
+            }
+
+            return null;
+        }
+
     }
 }

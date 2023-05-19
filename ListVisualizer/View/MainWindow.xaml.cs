@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -49,21 +50,23 @@ namespace ListVisualizer.View
             {
                 var listBoxItem = (ListBoxItem)columnsList.ItemContainerGenerator.ContainerFromItem(item);
                 var checkBox = FindVisualChild<CheckBox>(listBoxItem);
-
-                checkboxStates.Add(checkBox.IsChecked ?? false);
+                if (checkBox != null)
+                {
+                    checkboxStates.Add(checkBox.IsChecked ?? false);
+                }
             }
         }
 
-        private childItem FindVisualChild<childItem>(DependencyObject obj) where childItem : DependencyObject
+        private TChild? FindVisualChild<TChild>(DependencyObject obj) where TChild : DependencyObject
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
             {
                 DependencyObject child = VisualTreeHelper.GetChild(obj, i);
 
-                if (child != null && child is childItem)
-                    return (childItem)child;
+                if (child != null && child is TChild)
+                    return (TChild)child;
 
-                var childOfChild = FindVisualChild<childItem>(child);
+                var childOfChild = FindVisualChild<TChild>(child);
 
                 if (childOfChild != null)
                     return childOfChild;

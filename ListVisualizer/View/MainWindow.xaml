@@ -21,10 +21,12 @@
 
             <Button Margin="5" Command="{Binding CmdConnectToDb}" CommandParameter="{Binding ElementName=dataGrid3s}">Connect</Button>
 
-            <ListBox Name="columnsList" ItemsSource="{Binding ItemPropeties}">
+            <DataGrid Name="dataGrid3s"  AutoGenerateColumns="False" />
+            
+            <ListBox Name="columnsList" ItemsSource="{Binding ItemColumns}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <CheckBox Content="{Binding}" Command="{Binding DataContext.CmdToggleCheckbox, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"
+                        <CheckBox Content="{Binding}" Name="kek" Command="{Binding DataContext.CmdToggleCheckbox, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"
                                   CommandParameter="{Binding .}"
                                   Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
                     </DataTemplate>
@@ -50,12 +52,6 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-
-            <DataGrid Name="dataGrid"  AutoGenerateColumns="False" ItemsSource="{Binding DynamicItems}" />
-
-            <DataGrid Name="dataGrid2s"  AutoGenerateColumns="False" ItemsSource="{Binding DataTableItems}" />
-
-            <DataGrid Name="dataGrid3s"  AutoGenerateColumns="False" />
 
         </StackPanel>
     </ScrollViewer>

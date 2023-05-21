@@ -25,13 +25,19 @@ namespace ListVisualizer.Model
 
         public string ConnectionString { get; protected set; }
 
-        public TableResult FetchTableEntries(string tableName, string sqlCondition = "")
+        public TableResult FetchTableEntries(string tableName, string sqlCondition = "", string columnNames = "")
         {
             using IDbConnection connection = new SqlConnection(ConnectionString);
-            string sqlquery = $"SELECT * FROM {tableName}";
+            string sqlQuery = $"SELECT * FROM {tableName}";
+
+            if (columnNames != null && columnNames != "")
+            {
+                sqlQuery = $"SELECT {columnNames} FROM {tableName}";
+            }
+
             if (sqlCondition != null && sqlCondition != "")
             {
-                sqlquery = $"{sqlquery} WHERE {sqlCondition}";
+                sqlQuery = $"{sqlQuery} WHERE {sqlCondition}";
             }
 
             IDbCommand command = new SqlCommand
@@ -39,7 +45,7 @@ namespace ListVisualizer.Model
                 Connection = (SqlConnection)connection
             };
             connection.Open();
-            command.CommandText = sqlquery;
+            command.CommandText = sqlQuery;
             IDataReader reader = command.ExecuteReader();
 
             bool notEndOfResult;

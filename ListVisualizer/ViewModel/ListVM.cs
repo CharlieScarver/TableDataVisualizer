@@ -19,11 +19,15 @@ namespace ListVisualizer.ViewModel
 {
     public class ListVM : ObservableObject
     {
+        private const string TABLES_TABLE_NAME = "INFORMATION_SCHEMA.TABLES";
+
         private string _databaseName = "Data Source=.\\SQLEXPRESS;Initial Catalog=PearReviewDb;Integrated Security=True;TrustServerCertificate=true;"; // string.Empty;
         private string _tableName = "dbo.Courses"; // string.Empty;
 
         private DataGrid dataGrid;
         private DatabaseContext dbContext;
+
+        private TableResult availableTables;
         private TableResult tableItems;
 
         public ListVM()
@@ -31,6 +35,7 @@ namespace ListVisualizer.ViewModel
             dbContext = new DatabaseContext(DatabaseName);
             dataGrid = new DataGrid();
 
+            AvailableTables = new TableResult();
             TableItems = new TableResult();
         }
 
@@ -52,6 +57,12 @@ namespace ListVisualizer.ViewModel
             set { tableItems = value; NotifyPropertyChanged("TableItems"); }
         }
 
+        public TableResult AvailableTables
+        {
+            get { return availableTables; }
+            set { availableTables = value; NotifyPropertyChanged("AvailableTables"); }
+        }
+
         // Commands
 
         public ICommand CmdFillDataGrid
@@ -62,6 +73,11 @@ namespace ListVisualizer.ViewModel
         public ICommand CmdToggleCheckbox
         {
             get { return new CommandCreator(ToggleCheckbox); }
+        }
+
+        public ICommand CmdFetchTables
+        {
+            get { return new CommandCreator(FetchTables); }
         }
 
         // Internal methods
@@ -108,6 +124,11 @@ namespace ListVisualizer.ViewModel
         {
             // Rebuild grid
             RebuildDataGrid();
+        }
+
+        private void FetchTables(object _)
+        {
+            AvailableTables = dbContext.FetchTableEntries(TABLES_TABLE_NAME, "TABLE_TYPE = 'BASE TABLE'", "TABLE_NAME");
         }
     }
 }

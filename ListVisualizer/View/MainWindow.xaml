@@ -10,8 +10,7 @@
     <Window.DataContext>
         <ViewModel:ListVM/>
     </Window.DataContext>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <StackPanel>
             <Label Margin="5,5,5,0">Connection string:</Label>
             <TextBox Text="{Binding DatabaseName, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
@@ -19,40 +18,9 @@
             <Label Margin="5,5,5,0">Table name:</Label>
             <TextBox Text="{Binding TableName, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
-            <Button Margin="5" Command="{Binding CmdConnectToDb}" CommandParameter="{Binding ElementName=dataGrid3s}">Connect</Button>
+            <Button Margin="5" Command="{Binding CmdConnectToDb}" CommandParameter="{Binding ElementName=dataGrid}">Connect</Button>
 
-            <DataGrid Name="dataGrid3s"  AutoGenerateColumns="False" />
-            
-            <ListBox Name="columnsList" ItemsSource="{Binding ItemColumns}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <CheckBox Content="{Binding}" Name="kek" Command="{Binding DataContext.CmdToggleCheckbox, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"
-                                  CommandParameter="{Binding .}"
-                                  Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
-            <ListBox ItemsSource="{Binding ListItems}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <ListBox ItemsSource="{Binding}">
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal"/>
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
-
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Label Margin="3" Content="{Binding}" />
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
+            <DataGrid Name="dataGrid"  AutoGenerateColumns="False" Margin="5" />
         </StackPanel>
     </ScrollViewer>
 </Window>

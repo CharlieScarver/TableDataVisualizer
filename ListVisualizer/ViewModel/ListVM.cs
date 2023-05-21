@@ -139,6 +139,7 @@ namespace ListVisualizer.ViewModel
                     DataGridTextColumn column = new DataGridTextColumn();
                     column.Header = colName;
                     column.Binding = new Binding($"[{i}]");
+                    column.IsReadOnly = true;
                     dataGrid.Columns.Add(column);
                 }
             }

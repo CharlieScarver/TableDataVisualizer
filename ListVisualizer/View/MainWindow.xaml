@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ListVisualizer.View"
         xmlns:ViewModel="clr-namespace:ListVisualizer.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="1200">
+        Title="MainWindow" Height="700" Width="1200">
     <Window.DataContext>
         <ViewModel:ListVM/>
     </Window.DataContext>
@@ -18,9 +18,27 @@
             <Label Margin="5,5,5,0">Table name:</Label>
             <TextBox Text="{Binding TableName, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
-            <Button Margin="5" Command="{Binding CmdConnectToDb}" CommandParameter="{Binding ElementName=dataGrid}">Connect</Button>
+            <Button Command="{Binding CmdFillDataGrid}" CommandParameter="{Binding ElementName=dataGrid}" Margin="5">Connect</Button>
 
-            <DataGrid Name="dataGrid"  AutoGenerateColumns="False" Margin="5" />
+            <ListBox ItemsSource="{Binding TableItems.Columns}" Margin="5">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Black" BorderThickness="0,0,0,0" Margin="0,0,5,0">
+                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsVisible}" 
+                                 Command="{Binding DataContext.CmdToggleCheckbox, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"
+                                CommandParameter="{Binding .}" />
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <DataGrid Name="dataGrid" AutoGenerateColumns="False" Margin="5" />
         </StackPanel>
     </ScrollViewer>
 </Window>

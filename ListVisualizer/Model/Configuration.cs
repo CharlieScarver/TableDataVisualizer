@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace ListVisualizer.Model
 {
-    public class ListItem
+    public class Configuration
     {
-
     }
 }

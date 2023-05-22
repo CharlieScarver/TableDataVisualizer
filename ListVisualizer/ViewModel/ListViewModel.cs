@@ -1,4 +1,6 @@
 ﻿using ListVisualizer.Model;
+using System.Data.SqlClient;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -89,7 +91,14 @@ namespace ListVisualizer.ViewModel
 
         private void FillDataGrid(object gridParam)
         {
-            TableItems = dbContext.FetchTableEntries(TableName);
+            try
+            {
+                TableItems = dbContext.FetchTableEntries(TableName);
+            }
+            catch (SqlException e)
+            {
+                MessageBox.Show(e.Message);
+            }
 
             // Get a reference to the DataGrid
             DataGrid grid = (DataGrid)gridParam;
@@ -136,7 +145,14 @@ namespace ListVisualizer.ViewModel
         {
             IsTableSelected = false;
 
-            AvailableTables = dbContext.FetchTableEntries(TABLES_TABLE_NAME, TABLES_CONDITION, TABLES_COLUMNS);
+            try
+            {
+                AvailableTables = dbContext.FetchTableEntries(TABLES_TABLE_NAME, TABLES_CONDITION, TABLES_COLUMNS);
+            }
+            catch (SqlException e)
+            {
+                MessageBox.Show(e.Message);
+            }
 
             if (config.DeveloperMode)
             {

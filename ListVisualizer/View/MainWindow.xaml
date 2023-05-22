@@ -14,7 +14,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.DataContext>
-        <ViewModel:ListVM/>
+        <ViewModel:ListViewModel/>
     </Window.DataContext>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Padding="10">
         <StackPanel>
@@ -26,10 +26,10 @@
                 <StackPanel>
                     <Grid>
                         <Button Click="ConfigureButton_Click"
-                    Width="150" Margin="5,20,5,20" HorizontalAlignment="Right">Configure</Button>
+                            Width="150" Margin="5,20,5,20" HorizontalAlignment="Right">Configure</Button>
 
                         <Button Command="{Binding CmdFetchTables}"
-                    Width="150" Margin="5,20,5,20" HorizontalAlignment="Left">Refresh Tables List</Button>
+                            Width="150" Margin="5,20,5,20" HorizontalAlignment="Left">Refresh Tables List</Button>
                     </Grid>
 
                     <Label HorizontalAlignment="Left">Data table:</Label>
@@ -45,7 +45,8 @@
                     </ComboBox>
 
                     <Button Command="{Binding CmdFillDataGrid}" CommandParameter="{Binding ElementName=dataGrid}"
-                    Width="150" Margin="5,20,5,20" HorizontalAlignment="Left">Fetch Table Data</Button>
+                            IsEnabled="{Binding IsTableSelected}" Width="150" Margin="5,20,5,20" 
+                            HorizontalAlignment="Left">Fetch Table Data</Button>
 
                 </StackPanel>
             </GroupBox>
@@ -63,7 +64,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Border BorderBrush="Black" BorderThickness="0,0,0,0" Margin="0,0,5,0">
-                                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsVisible}" 
+                                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsVisible}"
                                         Command="{Binding DataContext.CmdToggleCheckbox, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"
                                         CommandParameter="{Binding .}" />
                                 </Border>

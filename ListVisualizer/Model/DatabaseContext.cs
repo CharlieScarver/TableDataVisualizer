@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
-using System.Windows.Controls;
-using System.Windows.Documents;
+using System.Data.SqlClient;
 
 namespace ListVisualizer.Model
 {
@@ -49,11 +42,21 @@ namespace ListVisualizer.Model
 
             TableResult result = new TableResult();
             bool readColNames = true;
+            int rowNumber = 1;
+
+            if (config.DeveloperMode)
+            {
+                result.Columns.Add(new ItemColumn("SID", true));
+            }
 
             // For each result row:
             while (notEndOfResult)
             {
                 ObservableCollection<string> row = new ObservableCollection<string>();
+                if (config.DeveloperMode)
+                {
+                    row.Add(rowNumber.ToString());
+                }
 
                 for (int i = 0; i < reader.FieldCount; i++)
                 {
@@ -72,6 +75,7 @@ namespace ListVisualizer.Model
                 readColNames = false;
                 result.Items.Add(row);
                 notEndOfResult = reader.Read();
+                rowNumber++;
             }
 
             return result;

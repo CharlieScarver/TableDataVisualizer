@@ -4,7 +4,7 @@
     {
         private static AppConfiguration singletonInstance = null!;
 
-        private AppConfiguration() {}
+        private AppConfiguration() { }
 
         public string ConnectionString { get; set; } = string.Empty;
 

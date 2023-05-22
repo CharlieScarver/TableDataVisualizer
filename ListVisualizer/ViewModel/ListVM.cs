@@ -20,35 +20,32 @@ namespace ListVisualizer.ViewModel
     public class ListVM : ObservableObject
     {
         private const string TABLES_TABLE_NAME = "INFORMATION_SCHEMA.TABLES";
+        private const string TABLES_CONDITION = "TABLE_TYPE = 'BASE TABLE'";
+        private const string TABLES_COLUMNS = "TABLE_NAME";
 
-        private string _databaseName = "Data Source=.\\SQLEXPRESS;Initial Catalog=PearReviewDb;Integrated Security=True;TrustServerCertificate=true;"; // string.Empty;
-        private string _tableName = "dbo.Courses"; // string.Empty;
+        private readonly AppConfiguration config;
 
+        private readonly DatabaseContext dbContext;
         private DataGrid dataGrid;
-        private DatabaseContext dbContext;
 
         private TableResult availableTables;
         private TableResult tableItems;
 
         public ListVM()
         {
-            dbContext = new DatabaseContext(DatabaseName);
+            config = AppConfiguration.GetAppConfiguration();
+
+            dbContext = new DatabaseContext();
             dataGrid = new DataGrid();
 
             AvailableTables = new TableResult();
             TableItems = new TableResult();
         }
 
-        public string DatabaseName
-        {
-            get { return _databaseName; }
-            set { _databaseName = value; NotifyPropertyChanged("DatabaseName"); }
-        }
-
         public string TableName
         {
-            get { return _tableName; }
-            set { _tableName = value; NotifyPropertyChanged("TableName"); }
+            get { return config.TableName; }
+            set { config.TableName = value; NotifyPropertyChanged("TableName"); }
         }
 
         public TableResult TableItems
@@ -128,7 +125,7 @@ namespace ListVisualizer.ViewModel
 
         private void FetchTables(object _)
         {
-            AvailableTables = dbContext.FetchTableEntries(TABLES_TABLE_NAME, "TABLE_TYPE = 'BASE TABLE'", "TABLE_NAME");
+            AvailableTables = dbContext.FetchTableEntries(TABLES_TABLE_NAME, TABLES_CONDITION, TABLES_COLUMNS);
         }
     }
 }

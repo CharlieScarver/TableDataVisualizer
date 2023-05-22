@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:ListVisualizer.View"
         xmlns:ViewModel="clr-namespace:ListVisualizer.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1200">
+        Title="Table Data Visualizer" Height="700" Width="1250">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding CmdFetchTables}" />
@@ -18,47 +18,62 @@
     </Window.DataContext>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Padding="10">
         <StackPanel>
-            <Label HorizontalAlignment="Left">Connection string:</Label>
-            <TextBox Text="{Binding DatabaseName, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+            <TextBlock FontSize="24" HorizontalAlignment="Center">
+                Table Data Visualizer
+            </TextBlock>
 
-            <Button Command="{Binding CmdFetchTables}" CommandParameter="{Binding ElementName=dataGrid}"
-                    Width="150" Margin="5,20,0,20" HorizontalAlignment="Left">Refresh Tables List</Button>
+            <GroupBox Header="Data Source" Padding="0,10,0,10" Margin="0,0,0,10">
+                <StackPanel>
+                    <Grid>
+                        <Button Click="ConfigureButton_Click"
+                    Width="150" Margin="5,20,5,20" HorizontalAlignment="Right">Configure</Button>
 
-            <Label HorizontalAlignment="Left">Connection string:</Label>
-            <ComboBox ItemsSource="{Binding AvailableTables.Items}"
+                        <Button Command="{Binding CmdFetchTables}"
+                    Width="150" Margin="5,20,5,20" HorizontalAlignment="Left">Refresh Tables List</Button>
+                    </Grid>
+
+                    <Label HorizontalAlignment="Left">Data table:</Label>
+                    <ComboBox ItemsSource="{Binding AvailableTables.Items}"
                       SelectedValue="{Binding TableName}"
                       SelectedValuePath="[0]"
                       Width="350" Margin="5,0,0,0" HorizontalAlignment="Left">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding [0]}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding [0]}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
-            <Button Command="{Binding CmdFillDataGrid}" CommandParameter="{Binding ElementName=dataGrid}"
-                    Width="150" Margin="5,20,0,20" HorizontalAlignment="Left">Fill Data Grid</Button>
+                    <Button Command="{Binding CmdFillDataGrid}" CommandParameter="{Binding ElementName=dataGrid}"
+                    Width="150" Margin="5,20,5,20" HorizontalAlignment="Left">Fetch Table Data</Button>
 
-            <Label HorizontalAlignment="Left">Visible columns:</Label>
-            <ListBox ItemsSource="{Binding TableItems.Columns}" Margin="5,0,0,10">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
+                </StackPanel>
+            </GroupBox>
 
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="Black" BorderThickness="0,0,0,0" Margin="0,0,5,0">
-                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsVisible}" 
-                                Command="{Binding DataContext.CmdToggleCheckbox, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"
-                                CommandParameter="{Binding .}" />
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <GroupBox Header="Data Visualizer" Padding="0,10,0,10">
+                <StackPanel>
+                    <Label HorizontalAlignment="Left">Visible columns:</Label>
+                    <ListBox ItemsSource="{Binding TableItems.Columns}" Margin="5,0,5,10">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
 
-            <DataGrid Name="dataGrid" AutoGenerateColumns="False" Margin="5,10,0,10"/>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="Black" BorderThickness="0,0,0,0" Margin="0,0,5,0">
+                                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsVisible}" 
+                                        Command="{Binding DataContext.CmdToggleCheckbox, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"
+                                        CommandParameter="{Binding .}" />
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <DataGrid Name="dataGrid" AutoGenerateColumns="False" Margin="5,10,5,10"/>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
     </ScrollViewer>
 </Window>

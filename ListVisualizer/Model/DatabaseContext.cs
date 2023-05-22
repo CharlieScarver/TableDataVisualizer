@@ -15,19 +15,15 @@ namespace ListVisualizer.Model
     {
         public DatabaseContext()
         {
-            ConnectionString = string.Empty;
         }
 
-        public DatabaseContext(string connectionString)
-        {
-            ConnectionString = connectionString;
-        }
-
-        public string ConnectionString { get; protected set; }
+        public string ConnectionString { get => AppConfiguration.GetAppConfiguration().ConnectionString; }
 
         public TableResult FetchTableEntries(string tableName, string sqlCondition = "", string columnNames = "")
         {
-            using IDbConnection connection = new SqlConnection(ConnectionString);
+            AppConfiguration config = AppConfiguration.GetAppConfiguration();
+
+            using IDbConnection connection = new SqlConnection(config.ConnectionString);
             string sqlQuery = $"SELECT * FROM {tableName}";
 
             if (columnNames != null && columnNames != "")

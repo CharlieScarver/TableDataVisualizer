@@ -1,8 +1,6 @@
-﻿using ListVisualizer.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,19 +15,13 @@ using System.Windows.Shapes;
 namespace ListVisualizer.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ConfigureWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ConfigureWindow : Window
     {
-        public MainWindow()
+        public ConfigureWindow()
         {
             InitializeComponent();
-        }
-
-        private void ConfigureButton_Click(object sender, RoutedEventArgs e)
-        {
-            ConfigureWindow config = new ConfigureWindow();
-            config.Show();
         }
     }
 }

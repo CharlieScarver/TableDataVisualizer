@@ -64,6 +64,12 @@ namespace ListVisualizer.ViewModel
             set { availableTables = value; NotifyPropertyChanged(nameof(AvailableTables)); }
         }
 
+        public bool IsTableSelected
+        {
+            get => isTableSelected;
+            set { isTableSelected = value; NotifyPropertyChanged(nameof(IsTableSelected)); }
+        }
+
         // Commands
 
         public ICommand CmdFillDataGrid
@@ -81,16 +87,13 @@ namespace ListVisualizer.ViewModel
             get { return new CommandCreator(FetchTables); }
         }
 
-        public bool IsTableSelected
-        {
-            get => isTableSelected;
-            set { isTableSelected = value; NotifyPropertyChanged(nameof(IsTableSelected)); }
-        }
-
         // Internal methods
 
-        private void FillDataGrid(object gridParam)
+        protected virtual void FillDataGrid(object gridParam)
         {
+            if (config.ConnectionString == null || config.ConnectionString == "") { return; }
+            if (TableName == null || TableName == "") { return; }
+
             try
             {
                 TableItems = dbContext.FetchTableEntries(TableName);
@@ -113,7 +116,7 @@ namespace ListVisualizer.ViewModel
             RebuildDataGrid();
         }
 
-        private void RebuildDataGrid()
+        protected virtual void RebuildDataGrid()
         {
             // Rebuild grid - we expect a new column configuration
             dataGrid.Columns.Clear();
@@ -135,14 +138,16 @@ namespace ListVisualizer.ViewModel
             dataGrid.Items.Refresh();
         }
 
-        private void ToggleCheckbox(object itemColumn)
+        protected virtual void ToggleCheckbox(object itemColumn)
         {
             // Rebuild grid
             RebuildDataGrid();
         }
 
-        private void FetchTables(object _)
+        protected virtual void FetchTables(object _)
         {
+            if (config.ConnectionString == null || config.ConnectionString == "") { return; }
+
             IsTableSelected = false;
 
             try
